@@ -48,6 +48,38 @@ contract Ownable {
 //  4) create 'whenNotPaused' & 'paused' modifier that throws in the appropriate situation
 //  5) create a Paused & Unpaused event that emits the address that triggered the event
 
+contract Pausable is Ownable {
+
+  bool private _paused;
+
+  function setPaused(bool _set) public onlyOwner() {
+    _paused = _set;
+    if(_paused == true) {
+          emit Paused(msg.sender);
+    } else {
+      emit Unpaused(msg.sender);
+    }
+  }
+
+  constructor() internal {
+    _paused = false;
+  }
+
+  modifier whenNotPaused() {
+    require(_paused == false);
+    _;
+  }
+
+  modifier paused() {
+    require(_paused == true);
+    _;
+  }
+
+  event Paused(address _caller);
+  event Unpaused(address _caller);
+
+}
+
 contract ERC165 {
     bytes4 private constant _INTERFACE_ID_ERC165 = 0x01ffc9a7;
     /*
@@ -125,6 +157,7 @@ contract ERC721 is Pausable, ERC165 {
     function balanceOf(address owner) public view returns (uint256) {
         // TODO return the token balance of given address
         // TIP: remember the functions to use for Counters. you can refresh yourself with the link above
+        return _ownerTokensCount[owner];
     }
 
     function ownerOf(uint256 tokenId) public view returns (address) {

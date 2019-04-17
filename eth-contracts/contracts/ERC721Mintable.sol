@@ -528,7 +528,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     // require the token exists before setting
 
     function setTokenURI(uint256 tokenId) internal {
-      require(_exists(tokenID));
+      require(_exists(tokenId));
       tokenURIs[tokenId] = strConcat(getBaseTokenURI(tokenId), tokenId);
     }
 
@@ -542,3 +542,18 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //      -takes in a 'to' address, tokenId, and tokenURI as parameters
 //      -returns a true boolean upon completion of the function
 //      -calls the superclass mint and setTokenURI functions
+
+contract TitleTrack is ERC721Metadata {
+
+  constructor(string memory name, string memory symbol, string memory baseTokenURI) public {
+
+  }
+
+  function mint(address to, uint tokenId, string baseTokenURI) public onlyOwner {
+    super._mint(to, tokenId);
+    _baseTokenURI = baseTokenURI;
+    setTokenURI(tokenId);
+  }
+
+
+}

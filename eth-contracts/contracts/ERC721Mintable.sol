@@ -20,7 +20,7 @@ contract Ownable {
       return _owner;
     }
 
-    constructor() {
+    constructor() internal {
       _owner = msg.sender;
     }
 
@@ -32,7 +32,7 @@ contract Ownable {
     function transferOwnership(address newOwner) public onlyOwner {
         // TODO add functionality to transfer control of the contract to a newOwner.
         // make sure the new owner is a real address
-        require(newOwner);
+        require(newOwner != address(0));
         address oldOwner = _owner;
         _owner = newOwner;
         emit OwnershipTransfered(oldOwner, newOwner);

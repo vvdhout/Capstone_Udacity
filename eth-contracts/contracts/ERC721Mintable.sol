@@ -172,7 +172,7 @@ contract ERC721 is Pausable, ERC165 {
         // TODO require the given address to not be the owner of the tokenId
         require(to != currentOwner);
         // TODO require the msg sender to be the owner of the contract or isApprovedForAll() to be true
-        require(msg.sender == getOwner() || isApprovedForAll(currentOwner, (msg.sender));
+        require(msg.sender == getOwner() || isApprovedForAll(currentOwner, (msg.sender)));
         // TODO add 'to' address to token approvals
         _tokenApprovals[tokenId] = to;
         // TODO emit Approval Event
@@ -263,12 +263,12 @@ contract ERC721 is Pausable, ERC165 {
         // TODO: require from address is the owner of the given token
         require(from == ownerOf(tokenId));
         // TODO: require token is being transfered to valid address
-        require(to == !address(0));
+        require(to != address(0));
         // TODO: clear approval
         _tokenApprovals[tokenId] = address(0);
         // TODO: update token counts & transfer ownership of the token ID
-        Counter.increment(_ownedTokensCount[to]);
-        Counter.decrement(_ownedTokensCount[to]);
+        Counters.increment(_ownedTokensCount[to]);
+        Counters.decrement(_ownedTokensCount[to]);
         _tokenOwner[tokenId] = to;
         // TODO: emit correct event
         emit Transfer(from, to, tokenId);
@@ -502,19 +502,19 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
     }
 
     // TODO: create external getter functions for name, symbol, and baseTokenURI
-    function getName() external view returns(string _name) {
+    function getName() external view returns(string memory name) {
       return _name;
     }
 
-    function getSymbol() external view returns(string _symbol) {
+    function getSymbol() external view returns(string memory symbol) {
       return _symbol;
     }
 
-    function getBaseTokenURI() external view returns(string _baseTokenURI) {
+    function getBaseTokenURI() external view returns(string memory baseTokenURI) {
       return _baseTokenURI;
     }
 
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
+    function tokenURI(uint256 tokenId) external view returns (string memory _tokenURI) {
         require(_exists(tokenId));
         return _tokenURIs[tokenId];
     }
@@ -529,7 +529,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
     function setTokenURI(uint256 tokenId) internal {
       require(_exists(tokenId));
-      tokenURIs[tokenId] = strConcat(getBaseTokenURI(tokenId), tokenId);
+      _tokenURIs[tokenId] = strConcat(_baseTokenURI, tokenId);
     }
 
 }
@@ -549,9 +549,8 @@ contract TitleTrack is ERC721Metadata {
 
   }
 
-  function mint(address to, uint tokenId, string baseTokenURI) public onlyOwner {
+  function mint(address to, uint tokenId) public onlyOwner {
     super._mint(to, tokenId);
-    _baseTokenURI = baseTokenURI;
     setTokenURI(tokenId);
   }
 

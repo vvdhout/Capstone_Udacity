@@ -61,6 +61,10 @@ contract Pausable is Ownable {
     }
   }
 
+  function getPaused() public view returns(bool status) {
+    return _paused;
+  }
+
   constructor() internal {
     _paused = false;
   }
@@ -529,7 +533,7 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 
     function setTokenURI(uint256 tokenId) internal {
       require(_exists(tokenId));
-      _tokenURIs[tokenId] = strConcat(_baseTokenURI, tokenId);
+      _tokenURIs[tokenId] = strConcat(_baseTokenURI, uint2str(tokenId));
     }
 
 }
@@ -543,9 +547,9 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
 //      -returns a true boolean upon completion of the function
 //      -calls the superclass mint and setTokenURI functions
 
-contract TitleTrack is ERC721Metadata {
+contract TitleTrack is ERC721Metadata("Uda City Property Tracker", "UCPT", "https://s3-us-west-2.amazonaws.com/udacity-blockchain/capstone/") {
 
-  constructor(string memory name, string memory symbol, string memory baseTokenURI) public {
+  constructor() public {
 
   }
 

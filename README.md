@@ -2,13 +2,36 @@
 
 The capstone will build upon the knowledge you have gained in the course in order to build a decentralized housing product.
 
+# Testing the project
+
+Clone the folder using git:
+```
+git clone https://github.com/vvdhout/Capstone_Udacity
+```
+Run NPM install to install dependencies:
+```
+npm install
+```
+Testing on a private blockchain using ganache:
+- Run ganache-cli in a different console
+```
+ganache-cli
+```
+Navigate to eth-contracts and run truffle test:
+```
+cd eth-contracts
+truffle compile --reset
+truffle migrate --reset
+truffle test
+```
+
 # Addresses
 Verifier Contract: 0x4cb37d104120605a7c61b4d23cedbc738f5b4b39
 SolnSquareVerifier Contract: 0xd27a26d447afc8b8a3ce9da6c00a0b5b10adb946
 Users Address: 0xf8d67a2d17b7936bda99585d921fd7276fc5cac7
 
 # Marketplace on OpenSea
-https://rinkeby.opensea.io/assets/udacitypropertytracker 
+https://rinkeby.opensea.io/assets/udacitypropertytracker
 
 # Project Resources
 

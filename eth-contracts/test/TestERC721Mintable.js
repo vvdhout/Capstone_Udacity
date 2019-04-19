@@ -60,7 +60,8 @@ contract('TestERC721Mintable', async accounts => {
         })
 
         it('should return contract owner', async function () {
-          this.contract = await ERC721MintableComplete.deployed({from: account_one});
+          this.contract = await ERC721MintableComplete.
+          deployed({from: account_one});
           let owner = await this.contract.getOwner();
           assert.equal(owner, account_one, "This is not the contract owner.");
         })

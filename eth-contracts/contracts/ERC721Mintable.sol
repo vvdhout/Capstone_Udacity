@@ -252,12 +252,15 @@ contract ERC721 is Pausable, ERC165 {
     function _mint(address to, uint256 tokenId) internal {
 
         // TODO revert if given tokenId already exists or given address is invalid
-        require(!_exists(tokenId) || to != address(0));
+        require(to != address(0));
+        require(!_exists(tokenId));
+
         // TODO mint tokenId to given address & increase token count of owner
         _tokenOwner[tokenId] = to;
-        Counters.increment(_ownedTokensCount[to]);
+        _ownedTokensCount[to].increment();
+
         // TODO emit Transfer event
-        emit Transfer(getOwner(), to, tokenId);
+        emit Transfer(address(0), to, tokenId);
     }
 
     // @dev Internal function to transfer ownership of a given token ID to another address.
@@ -505,24 +508,27 @@ contract ERC721Metadata is ERC721Enumerable, usingOraclize {
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
-    // TODO: create external getter functions for name, symbol, and baseTokenURI
-    function getName() external view returns(string memory name) {
-      return _name;
-    }
+        function name() external view returns (string memory) {
+            return _name;
+        }
 
-    function getSymbol() external view returns(string memory symbol) {
-      return _symbol;
-    }
+        /**
+         * @dev Gets the token symbol
+         * @return string representing the token symbol
+         */
+        function symbol() external view returns (string memory) {
+            return _symbol;
+        }
 
-    function getBaseTokenURI() external view returns(string memory baseTokenURI) {
-      return _baseTokenURI;
-    }
+        function baseTokenURI() external view returns (string memory) {
+            return _baseTokenURI;
+        }
 
-    function tokenURI(uint256 tokenId) external view returns (string memory _tokenURI) {
-        require(_exists(tokenId));
-        return _tokenURIs[tokenId];
-    }
 
+        function tokenURI(uint256 tokenId) external view returns (string memory) {
+            require(_exists(tokenId));
+            return _tokenURIs[tokenId];
+        }
 
     // TODO: Create an internal function to set the tokenURI of a specified tokenId
     // It should be the _baseTokenURI + the tokenId in string form
